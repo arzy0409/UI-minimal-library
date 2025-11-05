@@ -69,8 +69,6 @@ npm install
 npm run dev
 ```
 
-Anschließend öffne **http://localhost:5173** im Browser.
-
 ---
 
 ## Komponentenübersicht
