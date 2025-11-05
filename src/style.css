@@ -1,0 +1,205 @@
+/* =====================================================
+   DESIGN TOKENS (Grundwerte)
+   ===================================================== */
+:root {
+  /* Farben (Light Mode) */
+  --color-bg: #ffffff;
+  --color-fg: #111111;
+  --page-bg: #f9fafb;
+  --al-border: #e6e6e6;
+
+  /* Radius & Schatten */
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  /* Abstände */
+  --space-sm: 8px;
+  --space-md: 16px;
+
+  /* Typografie */
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 16px;
+  color: var(--color-fg);
+  background: var(--color-bg);
+}
+
+/* =====================================================
+   DARK MODE VARIANTEN
+   ===================================================== */
+:root[data-theme="dark"] {
+  --color-bg: #1c1c1c;
+  --color-fg: #f6f6f6;
+  --page-bg: #121212;
+  --al-border: #2a2a2a;
+}
+
+/* =====================================================
+   RESET / BASISLAYOUT
+   ===================================================== */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* =====================================================
+   HERO SECTION
+   ===================================================== */
+.hero {
+  display: grid;
+  gap: 8px;
+  width: min(1100px, 92vw);
+  margin-inline: auto;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+}
+
+.hero .lead {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Linie über gesamte Breite */
+.hero-line {
+  height: 1px;
+  background: var(--al-border);
+  width: 100vw;
+  margin: 12px 0 0;
+  margin-inline: calc(-50vw + 50%);
+}
+
+/* =====================================================
+   DEMO CONTAINER
+   ===================================================== */
+.ui-demo {
+  background: var(--page-bg);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 36px 0 56px;
+}
+
+.ui-demo__container {
+  width: min(1100px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* =====================================================
+   TOOLS GRID (Komponentenübersicht)
+   ===================================================== */
+.tools {
+  display: grid;
+  place-items: center;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 1100px) {
+  .tool-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+  }
+}
+@media (max-width: 720px) {
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================
+   ACCORDION-KARTEN (Komponenten-Demos)
+   ===================================================== */
+.acc {
+  width: 100%;
+  border: 1px solid var(--al-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* Header / Summary */
+.acc__summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+
+/* Entfernt Standardmarker */
+.acc__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Pfeilrotation */
+.acc__summary::after {
+  content: "▸";
+  margin-left: auto;
+  opacity: 0.7;
+  transition: transform 0.2s;
+}
+.acc[open] .acc__summary::after {
+  transform: rotate(90deg);
+}
+
+/* Accordion-Inhalt */
+.acc__body {
+  padding: 12px 16px 16px;
+  display: grid;
+  gap: 12px;
+}
+
+/* Beschreibungstext */
+.acc__desc {
+  margin: 0 0 4px 0;
+  opacity: 0.9;
+}
+
+/* =====================================================
+   DEMO-HILFSKLASSEN
+   ===================================================== */
+/* Vertikale Stapel (z. B. Inputs untereinander) */
+.stack-sm {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+/* Horizontale Reihen (z. B. Buttons nebeneinander) */
+.row-sm {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* =====================================================
+   TABS PANEL (Optionale Demo-Ergänzung)
+   ===================================================== */
+.ui-tabs_panel {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--al-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+}
