@@ -4,17 +4,17 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
 
-# 🧩 UI-Minimal Library
+# UI-Minimal Library
 
 Eine minimalistische, komponentenbasierte **UI-Library für Vue 3 + TypeScript**, aufgebaut auf **Design Tokens** mit Unterstützung für **Light/Dark Mode** und **Accessibility (A11y)**.
 
 ---
 
-## ✨ Features
+## Features
 
-- 🎨 Einheitliches Design-System auf Basis globaler Tokens
-- 🌓 Automatischer Theme-Switch (Light/Dark)
-- 🧱 Wiederverwendbare Komponenten:
+- Einheitliches Design-System auf Basis globaler Tokens
+- Automatischer Theme-Switch (Light/Dark)
+- Wiederverwendbare Komponenten:
   - Buttons (Primary/Neutral)
   - Cards mit Header/Footer-Slots
   - Inputs mit Validierung
@@ -25,12 +25,12 @@ Eine minimalistische, komponentenbasierte **UI-Library für Vue 3 + TypeScript**
   - Alerts mit Rollen & Schließen-Button
   - Tooltips (top/bottom/left/right)
   - Tabs mit ARIA-Integration
-- ♿ Fokus-Ringe und Keyboard-Navigation
-- 🧩 Kompatibel mit Vite & TypeScript
+- Fokus-Ringe und Keyboard-Navigation
+- Kompatibel mit Vite & TypeScript
 
 ---
 
-## 🧠 Architektur
+## Architektur
 
 ```
 Frontend (Vue 3 + Vite + TypeScript)
@@ -56,7 +56,7 @@ Frontend (Vue 3 + Vite + TypeScript)
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ```bash
 # Repository klonen
@@ -73,7 +73,7 @@ Anschließend öffne **http://localhost:5173** im Browser.
 
 ---
 
-## 🧩 Komponentenübersicht
+## Komponentenübersicht
 
 | Komponente | Beschreibung |
 |-------------|---------------|
@@ -90,7 +90,7 @@ Anschließend öffne **http://localhost:5173** im Browser.
 
 ---
 
-## 🎨 Design Tokens
+## Design Tokens
 
 Die Library basiert auf **Design Tokens** für Farben, Abstände, Radius und Schatten.
 
@@ -111,7 +111,7 @@ Tokens werden über `style-dictionary` generiert.
 
 ---
 
-## 🌗 Themes
+## Themes
 
 Das Theme (Light/Dark) wird automatisch aus `localStorage` geladen und kann per Button gewechselt werden.
 
@@ -124,7 +124,7 @@ watchEffect(() => {
 
 ---
 
-## 🧱 Beispiel: Tooltip
+## Beispiel: Tooltip
 
 ```vue
 <UiTooltip content="Warnung" position="left">
@@ -134,20 +134,18 @@ watchEffect(() => {
 
 ---
 
-## 🧩 Ziel des Projekts
+## Ziel des Projekts
 
 Diese Library wurde entwickelt, um **minimalistische, barrierefreie und modulare** UI-Komponenten zu schaffen,
 die einfach in Vue 3-Projekte integriert werden können — ideal für Lernzwecke oder kleine Projekte.
 
 ---
 
-## 🤝 Beitrag & Erweiterung
+## Beitrag & Erweiterung
 
 Pull Requests, Issues oder Verbesserungsvorschläge sind willkommen!  
 Falls du Ideen für neue Komponenten hast, öffne gerne ein Issue.
 
 ---
 
-## 📜 Lizenz
 
-MIT License © 2025 — UI-Minimal Library by arqy0409
