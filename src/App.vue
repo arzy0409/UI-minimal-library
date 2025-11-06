@@ -350,7 +350,7 @@ onMounted(() => {
         <span>UI-Minimal Library · v0.1</span>
         <span>Design-Tokens · Light/Dark · A11y</span>
         <a
-          href="https://github.com/DEIN-GITHUB-NAME/ui-minimal-library"
+          href="https://github.com/arzy0409/UI-minimal-library"
           target="_blank"
           rel="noopener"
           aria-label="Repository"
