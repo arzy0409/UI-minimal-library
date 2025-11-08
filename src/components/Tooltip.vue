@@ -1,186 +1,111 @@
 <script setup lang="ts">
-/* =====================================================
-   IMPORTS & PROPS-DEFINITION
-   ===================================================== */
-import { ref } from 'vue'
-
 /**
- * Tooltip-Komponente
- * Liefert kurze Kontexthinweise bei Hover oder Fokus.
- * Unterstützt Positionen: oben, unten, links, rechts.
+ * Tooltip.vue — Designsystem light (A11y-ready)
+ *
+ * Ziele:
+ * - Trigger verweist per `aria-describedby` auf den Tooltip-Content
+ * - Content trägt `role="tooltip"` + stabile ID
+ * - Öffnen/Schließen per Maus (hover) und Tastatur (focus)
+ * - ESC schließt nur, wenn der Trigger fokussiert ist (nicht global)
+ *
+ * Styling:
+ * - Farben/Schatten/Radius kommen aus base.css/tokens.css (siehe .ui-tooltip__content)
+ * - Die Positions-Klassen (.pos-top/.pos-right/...) sind hier scoped definiert
  */
-const props = withDefaults(
-  defineProps<{
-    content?: string
-    position?: 'top' | 'bottom' | 'left' | 'right'
-  }>(),
-  {
-    content: '',
-    position: 'top',
-  }
-)
 
-/* =====================================================
-   REAKTIVE ZUSTÄNDE
-   ===================================================== */
+import { computed, ref } from 'vue'
+
+const props = defineProps<{
+  /** Tooltip-Text */
+  content: string
+  /** Position relativ zum Trigger (CSS-seitig gestylt) */
+  position?: 'top' | 'right' | 'bottom' | 'left'
+  /** Optionale Basis-ID (z. B. für Tests/SSR); sonst wird generiert */
+  id?: string
+  /**
+   * Falls der Slot NICHT fokussierbar ist (z. B. <span> Badge),
+   * macht dieser Schalter den Trigger selbst fokussierbar (tabindex=0).
+   * Wenn im Slot bereits ein <button>/<a> liegt, setze auf false.
+   */
+  focusableTrigger?: boolean
+}>()
+
+/** Sichtbarkeit (light: rein lokal) */
 const open = ref(false)
+
+/** stabile Content-ID für Screenreader */
+const _uid = Math.random().toString(36).slice(2)
+const contentId = computed(() => (props.id ? `${props.id}-tooltip` : `ui-tooltip-${_uid}`))
+
+/** Positionsklasse für CSS-Layout */
+const posClass = computed(() => `pos-${props.position ?? 'top'}`)
+
+/** Trigger-Fokusbarkeit: Standard = true (gut für Badge/Span) */
+const triggerTabindex = computed(() => (props.focusableTrigger ?? true ? 0 : undefined))
 </script>
 
 <template>
-  <!-- ÄUSSERER WRAPPER -->
+  <!-- Wrapper: steuert nur Sichtbarkeit per Maus/Fokus -->
   <span
     class="ui-tooltip"
     @mouseenter="open = true"
     @mouseleave="open = false"
     @focusin="open = true"
     @focusout="open = false"
-    @keydown.esc="open = false"
   >
-    <!-- TRIGGER-ELEMENT (das Ziel, über dem der Tooltip erscheint) -->
-    <span class="ui-tooltip__trigger">
+    <!--
+      TRIGGER:
+      - verweist mit aria-describedby auf den Tooltip-Text
+      - optional fokussierbar (tabindex=0), wenn Slot kein interaktives Element ist
+      - ESC schließt NUR, wenn dieser Trigger fokussiert ist
+    -->
+    <span
+      class="ui-tooltip__trigger"
+      :tabindex="triggerTabindex"
+      :aria-describedby="contentId"
+      @keydown.esc.stop.prevent="open = false"
+    >
       <slot />
     </span>
 
-    <!-- TOOLTIP-INHALT -->
-    <transition name="ttfade">
-      <span
-        v-if="open"
-        class="ui-tooltip__content"
-        :data-pos="props.position"
-        role="tooltip"
-      >
-        <!-- Inhalt über Props oder benannten Slot -->
-        <slot name="content">{{ props.content }}</slot>
-
-        <!-- Pfeil (zeigt zur Quelle) -->
-        <span class="ui-tooltip__arrow" aria-hidden="true"></span>
-      </span>
-    </transition>
+    <!--
+      TOOLTIP-CONTENT:
+      - Screenreader-verständlich (role="tooltip")
+      - ID wird durch den Trigger referenziert
+      - Positionierung per Klasse (Farben/Schatten kommen aus base.css)
+    -->
+    <div
+      v-if="open"
+      class="ui-tooltip__content"
+      :class="posClass"
+      :id="contentId"
+      role="tooltip"
+    >
+      {{ props.content }}
+    </div>
   </span>
 </template>
 
 <style scoped>
-/* =====================================================
-   GRUNDLAYOUT
-   ===================================================== */
-/* Der Container ist Referenzpunkt für die Positionslogik */
+/* Minimal-Layout-Hooks: deine Look&Feel-Token (bg/fg/shadow) kommen aus base.css */
+
+/* Wrapper: inline-flex, damit Trigger/Content sauber ausgerichtet sind */
 .ui-tooltip {
   position: relative;
-  display: inline-block; /* wichtig: kein inline-flex */
+  display: inline-flex;
   vertical-align: middle;
 }
 
-/* Fokus-Ring (aus base.css über --focus-ring) */
-.ui-tooltip__trigger:focus-visible {
-  outline: 0;
-  box-shadow: var(--focus-ring);
-  border-radius: 8px;
-}
-
-/* =====================================================
-   TOOLTIP-FLÄCHE (CONTENT)
-   ===================================================== */
+/* Content absolut positionieren; base.css liefert Farben/Schatten/Radius/Padding */
 .ui-tooltip__content {
   position: absolute;
-  z-index: 1000;
-  padding: 6px 10px;
-  font-size: 0.9rem;
   white-space: nowrap;
-  pointer-events: none;
-
-  /* Farben & Schatten (Design Tokens) */
-  background: var(--tooltip-bg, rgba(33, 33, 33, 0.95));
-  color: var(--tooltip-fg, #fff);
-  border-radius: 6px;
-  box-shadow: var(--tooltip-shadow, 0 2px 8px rgba(0, 0, 0, 0.2));
+  z-index: 20;
 }
 
-/* =====================================================
-   ANIMATION (Opacity-Transition)
-   ===================================================== */
-/* Nur Opacity animieren – keine Transforms, damit Positionen stabil bleiben */
-.ttfad-enter-active,
-.ttfad-leave-active {
-  transition: opacity 0.15s ease;
-}
-.ttfad-enter-from,
-.ttfad-leave-to {
-  opacity: 0;
-}
-.ttfad-enter-to,
-.ttfad-leave-from {
-  opacity: 1;
-}
-
-/* =====================================================
-   POSITIONIERUNG
-   ===================================================== */
-.ui-tooltip {
-  --tt-offset: 10px; /* Abstand zwischen Trigger und Tooltip */
-}
-
-/* Tooltip oberhalb */
-.ui-tooltip__content[data-pos='top'] {
-  left: 50%;
-  bottom: calc(100% + var(--tt-offset));
-  transform: translateX(-50%);
-}
-
-/* Tooltip unterhalb */
-.ui-tooltip__content[data-pos='bottom'] {
-  left: 50%;
-  top: calc(100% + var(--tt-offset));
-  transform: translateX(-50%);
-}
-
-/* Tooltip links vom Element */
-.ui-tooltip__content[data-pos='left'] {
-  right: calc(100% + var(--tt-offset));
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Tooltip rechts vom Element */
-.ui-tooltip__content[data-pos='right'] {
-  left: calc(100% + var(--tt-offset));
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* =====================================================
-   PFEIL (VISUELLE VERBINDUNG)
-   ===================================================== */
-.ui-tooltip__arrow {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: inherit;
-  box-shadow: inherit;
-  transform: rotate(45deg);
-}
-
-/* Pfeil-Position je nach Tooltip-Ausrichtung */
-.ui-tooltip__content[data-pos='top'] .ui-tooltip__arrow {
-  top: 100%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.ui-tooltip__content[data-pos='bottom'] .ui-tooltip__arrow {
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.ui-tooltip__content[data-pos='left'] .ui-tooltip__arrow {
-  left: 100%;
-  top: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.ui-tooltip__content[data-pos='right'] .ui-tooltip__arrow {
-  left: 0;
-  top: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-}
+/* Positionsklassen – ggf. anpassen, falls du andere Namen bevorzugst */
+.ui-tooltip__content.pos-top    { bottom: 100%; left: 50%; transform: translate(-50%, -6px); }
+.ui-tooltip__content.pos-bottom { top: 100%;    left: 50%; transform: translate(-50%,  6px); }
+.ui-tooltip__content.pos-left   { right: 100%;  top: 50%;  transform: translate(-6px, -50%); }
+.ui-tooltip__content.pos-right  { left: 100%;   top: 50%;  transform: translate( 6px, -50%); }
 </style>
