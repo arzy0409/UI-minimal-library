@@ -4,7 +4,10 @@
 :root {
   /* Fokus-Ring */
   --focus-color: var(--color-primary, #2563eb);
-  --focus-ring: 0 0 0 3px color-mix(in oklab, var(--focus-color) 20%, transparent);
+  /* Fallback für Browser ohne color-mix (Chrome < 124, Safari < 17.2) */
+  --focus-ring: 0 0 0 3px var(--focus-color);
+  /* schöne Variante für moderne Browser */
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--focus-color) 70%, transparent);
 
   /* Grundfarben */
   --color-bg: var(--color-bg-light, #ffffff);
@@ -122,8 +125,7 @@ html, body { margin: 0; }
   background: var(--color-bg);
   color: var(--color-fg);
   box-shadow: var(--shadow-sm);
-  /* WICHTIG: Overlays (Tooltip/Dropdown) dürfen hinausragen */
-  overflow: visible;
+  overflow: visible; /* wichtig für sichtbare Fokus-Ringe */
   transition: box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
 :root[data-theme="dark"] .acc {
@@ -182,7 +184,6 @@ html, body { margin: 0; }
   background: var(--color-bg);
   color: var(--color-fg);
   box-shadow: var(--shadow-sm);
-  /* WICHTIG: Overlays/Tooltips dürfen hinausragen */
   overflow: visible;
   transition: box-shadow .2s ease, border-color .2s ease;
 }
@@ -279,7 +280,6 @@ input[disabled], select[disabled], textarea[disabled] {
 /* =====================================================
    TOOLTIP (nur Basis-Tokens anwenden)
    ===================================================== */
-/* Die konkrete Positionierung/Pfeil erfolgt in Tooltip.vue (scoped). */
 .ui-tooltip__content {
   background: var(--tooltip-bg);
   color: var(--tooltip-fg);
@@ -290,29 +290,47 @@ input[disabled], select[disabled], textarea[disabled] {
   max-width: 180px;
   z-index: 20;
 }
-
-/* Tooltip-Trigger gut fokussierbar */
 .ui-tooltip__trigger:focus-visible {
   outline: 0;
   box-shadow: var(--focus-ring);
   border-radius: 8px;
 }
-
-/* Tooltip-Trigger zuverlässig als Inline-Flex behandeln */
 .ui-tooltip,
 .ui-tooltip__trigger {
   display: inline-flex;
   vertical-align: middle;
 }
-
-/* Spacing zwischen benachbarten Triggern – unabhängig von Wrappern */
 .ui-tooltip + .ui-tooltip,
 .ui-tooltip__trigger + .ui-tooltip__trigger {
   margin-left: var(--space-sm, 8px);
 }
 
 /* =====================================================
-   UTILITIES: Stacks/Rows + Fallback ohne gap
+   GLOBALER FOKUS-STIL (Fix)
+   ===================================================== */
+:where(
+  button, .ui-button, .ui-btn,
+  a[href], [role="button"],
+  input, select, textarea,
+  summary, .acc__summary,
+  .ui-tabs__tab,
+  .ui-tooltip__trigger
+):focus,
+:where(
+  button, .ui-button, .ui-btn,
+  a[href], [role="button"],
+  input, select, textarea,
+  summary, .acc__summary,
+  .ui-tabs__tab,
+  .ui-tooltip__trigger
+):focus-visible {
+  outline: none !important;
+  box-shadow: var(--focus-ring) !important;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   UTILITIES
    ===================================================== */
 .stack-sm { display: grid; gap: var(--space-sm); }
 .row-sm   { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
@@ -321,25 +339,21 @@ input[disabled], select[disabled], textarea[disabled] {
   .stack-sm > * + * { margin-top: var(--space-sm); }
   .row-sm   > * + * { margin-left: var(--space-sm); }
 }
-
-/* Kompakte, dezente Beschreibungen in Panels/Accordions */
 .acc__desc--lead {
   margin: 0 0 6px 0;
   font-size: .95rem;
   line-height: 1.5;
   color: color-mix(in oklab, var(--color-fg) 78%, transparent);
 }
-
 .acc__desc-list {
   margin: 0 0 8px 0;
-  padding-left: 18px;         /* klassische Bullets */
+  padding-left: 18px;
   display: grid;
   gap: 4px;
   font-size: .95rem;
   color: color-mix(in oklab, var(--color-fg) 70%, transparent);
 }
 .acc__desc-list li { margin: 0; }
-
 
 /* =====================================================
    FOOTER
