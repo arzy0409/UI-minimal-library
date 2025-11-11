@@ -4,9 +4,7 @@
 :root {
   /* Fokus-Ring */
   --focus-color: var(--color-primary, #2563eb);
-  /* Fallback für Browser ohne color-mix (Chrome < 124, Safari < 17.2) */
   --focus-ring: 0 0 0 3px var(--focus-color);
-  /* schöne Variante für moderne Browser */
   --focus-ring: 0 0 0 3px color-mix(in srgb, var(--focus-color) 70%, transparent);
 
   /* Grundfarben */
