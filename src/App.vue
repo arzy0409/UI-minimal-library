@@ -116,7 +116,7 @@ onMounted(() => {
            HERO-BEREICH
            ===================================================== -->
       <header class="hero">
-        <h1>Willkommen zur UI-Minimal Library</h1>
+        <h1>Willkommen zur Minimalistic UI Component Library</h1>
         <p class="lead">
           Eine kleine, konsistente Komponenten-Sammlung auf Basis von Design-Tokens.
         </p>
