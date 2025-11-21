@@ -1,13 +1,19 @@
 <script setup lang="ts">
-/* =====================================================================
-   UI-MODAL (Dialog)
-   - v-model (modelValue: boolean) steuert Öffnen/Schließen
-   - Props: title, closeOnEsc, closeOnBackdrop, size, id
-   - Events: update:modelValue, open, close
-   - A11y: role="dialog", aria-modal="true", aria-labelledby, Fokus-Trap
-   - UX: ESC schließt (optional), Klick auf Backdrop schließt (optional),
-         Scroll-Lock für <html>, Fokus zurück zum vorher aktiven Element
-   ===================================================================== */
+/**
+ * Modal.vue — Dialog-Komponente (Designsystem light)
+ *
+ * Ziele:
+ * - Öffnen/Schließen per v-model:open
+ * - Fokus springt beim Öffnen in das Modal (Fokusaufnahme)
+ * - ESC schließt den Dialog (Tastaturbedienung)
+ * - Klick auf Backdrop schließt (Option für leichte Bedienbarkeit)
+ *
+ * A11y:
+ * - Rolle `dialog` + `aria-modal="true"`
+ * - `aria-labelledby` verknüpft Titel und Dialog
+ * - **kein vollständiger Fokus-Trap**: Tab bewegt sich nicht zyklisch,
+ *   sondern verlässt das Modal. (Für ein leichtgewichtiges Designsystem gewollt.)
+ */
 import { ref, watch, onMounted, onBeforeUnmount, nextTick, computed } from 'vue'
 
 const props = withDefaults(defineProps<{

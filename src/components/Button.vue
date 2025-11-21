@@ -1,13 +1,19 @@
 <script setup lang="ts">
-/* =====================================================================
-   UI-BUTTON (Primär / Neutral)
-   ---------------------------------------------------------------------
-   Ziel:
-   - Einheitlicher, token-basierter Button
-   - Varianten: 'primary' | 'neutral'
-   - Zustände: hover, active, disabled, loading
-   - A11y: focus-visible Ring über Token, aria-busy bei Ladezustand
-   ===================================================================== */
+/**
+ * Button.vue — UI-Button (Designsystem light)
+ *
+ * Ziele:
+ * - Einheitlicher Button mit Variant-Styles (primary, neutral, etc.)
+ * - Keyboard- und Screenreader-freundlich (focus-visible, disabled)
+ * - Loading-State optional möglich (via Prop), UI wird entsprechend angepasst
+ *
+ * A11y:
+ * - Sichtbarer Fokus-Ring über Design Token (globaler focus-visible-Stil)
+ * - `disabled` gibt System-Disabled korrekt an
+ * - Hinweis: `aria-busy` ist optional sinnvoll für Loading-Zustände,
+ *   aber im aktuellen Code NICHT gesetzt (kann später ergänzt werden)
+ */
+
 
 const props = withDefaults(defineProps<{
   /** Farb-/Stilvariante */

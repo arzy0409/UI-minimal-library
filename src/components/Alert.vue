@@ -1,17 +1,18 @@
 <script setup lang="ts">
-/* =====================================================================
-   UI-ALERT – Hinweis- / Status-Komponente
-   ---------------------------------------------------------------------
-   Zweck
-   - Kurze Statusmeldungen (Info, Erfolg, Warnung, Fehler)
-   - Optionaler Titel
-   - Optional schließbar (dismissible)
-   - ARIA-Rolle "status" (polite) oder "alert" (assertive)
+/**
+ * Alert.vue — Hinweis-/Statuskomponente
+ *
+ * Ziele:
+ * - Darstellung kurzer Hinweise, Infos, Warnungen oder Fehler
+ * - Optional schließbar (dismissible)
+ *
+ * A11y:
+ * - Nutzt `role="alert"` → Screenreader geben den Inhalt sofort aus
+ *   (assertive Live-Region, geeignet für Fehler/Hinweise mit hoher Priorität)
+ * - Für weniger dringliche Hinweise könnte alternativ `role="status"` genutzt werden,
+ *   wird jedoch im aktuellen Code NICHT gesetzt.
+ */
 
-   Tokens & Theming
-   - Nutzt globale Design-Tokens (Farben, Radius, Schatten)
-   - Variantenfarben via CSS-Custom-Properties
-   ===================================================================== */
 
 type LiveRole = 'status' | 'alert'
 
